@@ -28,19 +28,13 @@ class CattleRepository:
 
     # Get by ID
     def get_by_id(self, cattle_id: UUID) -> Optional[Cattle]:
-        return (
-            self.db.query(Cattle)
-            .filter(Cattle.id == cattle_id, Cattle.deleted_at.is_(None))
-            .first()
-        )
+        stmt = select(Cattle).where(Cattle.id == cattle_id, Cattle.deleted_at.is_(None))
+        return self.db.execute(stmt).scalars().first()
 
     # Get by identifier
     def get_by_identifier(self, identifier: str) -> Optional[Cattle]:
-        return (
-            self.db.query(Cattle)
-            .filter(Cattle.identifier == identifier, Cattle.deleted_at.is_(None))
-            .first()
-        )
+        stmt = select(Cattle).where(Cattle.identifier == identifier, Cattle.deleted_at.is_(None))
+        return self.db.execute(stmt).scalars().first()
 
     # Update existing cattle
     def update(self, cattle: Cattle, updates: CattleUpdate) -> Cattle:
