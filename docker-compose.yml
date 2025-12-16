@@ -1,0 +1,20 @@
+services:
+  db:
+    image: postgres:16
+    container_name: farm-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-farmdb}
+      POSTGRES_USER: ${POSTGRES_USER:-farmuser}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - farm_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-farmuser} -d ${POSTGRES_DB:-farmdb}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  farm_pgdata:

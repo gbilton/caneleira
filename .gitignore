@@ -53,9 +53,6 @@ backend/htmlcov/
 backend/.mypy_cache/
 backend/.ruff_cache/
 
-# Scripts
-backend/app/db/db.sh
-
 # ========================
 # General
 # ========================
