@@ -1,20 +1,18 @@
 from datetime import datetime
-from typing import Optional
 from uuid import UUID
 from pydantic import BaseModel
 
 
-class CattleCreate(BaseModel):
-    identifier: str
-    herd_id: Optional[UUID] = None
+class HerdCreate(BaseModel):
+    name: str
 
     model_config = {
         "from_attributes": True
     }
 
-class CattleRead(BaseModel):
+class HerdRead(BaseModel):
     id: UUID
-    identifier: str
+    name: str
     created_at: datetime
     updated_at: datetime
     deleted_at: datetime | None = None
@@ -23,15 +21,15 @@ class CattleRead(BaseModel):
         "from_attributes": True
     }
 
-class CattleUpdate(BaseModel):
-    identifier: str
+class HerdUpdate(BaseModel):
+    name: str
 
-class CattleDelete(BaseModel):
+class HerdDelete(BaseModel):
     id: str 
 
-class CattleResponse(BaseModel):
+class HerdResponse(BaseModel):
     id: UUID
-    identifier: str
+    name: str
     created_at: datetime
     updated_at: datetime
     deleted_at: datetime | None = None

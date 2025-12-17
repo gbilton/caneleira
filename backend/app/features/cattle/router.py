@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, status
-from typing import List
+from typing import List, Optional
 from uuid import UUID
 
 from .schema import CattleCreate, CattleUpdate, CattleResponse
@@ -19,7 +19,7 @@ def get_cattle(cattle_id: UUID, service: CattleService = Depends(get_cattle_serv
 
 @router.get("", response_model=List[CattleResponse])
 def list_cattle(
-    herd_id: int | None = None,
+    herd_id: Optional[UUID] = None,
     service: CattleService = Depends(get_cattle_service),
 ):
     return service.list_all(herd_id=herd_id)
