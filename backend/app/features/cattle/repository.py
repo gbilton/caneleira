@@ -1,6 +1,6 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
-from typing import List, Optional
+from typing import Optional, Sequence
 from .model import Cattle, WeightHistory
 from .schema import CattleCreate, CattleUpdate
 from uuid import UUID
@@ -20,7 +20,7 @@ class CattleRepository:
         return cattle
 
     # Get all cattle (exclude soft-deleted)
-    def get_all(self, herd_id: Optional[UUID] = None) -> List[Cattle]:
+    def get_all(self, herd_id: Optional[UUID] = None) -> Sequence[Cattle]:
         stmt = select(Cattle).where(Cattle.deleted_at.is_(None))
         if herd_id:
             stmt = stmt.where(Cattle.herd_id == herd_id)
@@ -64,7 +64,7 @@ class WeightHistoryRepository:
         self.db.commit()
         return weight_history_record
 
-    def get_all(self, cattle_id: UUID) -> List:
+    def get_all(self, cattle_id: UUID) -> Sequence[WeightHistory]:
         stmt = select(WeightHistory).where(WeightHistory.cattle_id == cattle_id, WeightHistory.deleted_at.is_(None))
         return self.db.execute(stmt).scalars().all()
     

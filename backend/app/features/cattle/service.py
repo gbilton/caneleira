@@ -1,9 +1,9 @@
 from typing import List, Optional
 from uuid import UUID
+from datetime import datetime
 
 from fastapi import HTTPException
-from httpx import delete
-from app.features.cattle.model import Cattle
+from app.features.cattle.model import Cattle, WeightHistory
 from app.features.cattle.repository import CattleRepository, WeightHistoryRepository
 from app.features.cattle.schema import CattleCreate, CattleRead, CattleUpdate
 
@@ -35,17 +35,17 @@ class CattleService:
         updated_cattle = self.repository.update(cattle, updates)
         return CattleRead.model_validate(updated_cattle)
     
-    def delete(self, cattle_id: int) -> None:
+    def delete(self, cattle_id: UUID) -> None:
         cattle = self.repository.get_by_id(cattle_id)  
         if not cattle:
             raise HTTPException(status_code=404, detail=f"Cattle id {cattle_id} not found")
         self.repository.delete(cattle)
 
 class WeightHistoryService:
-    def __init__(self, repository):
+    def __init__(self, repository: WeightHistoryRepository):
         self.repository: WeightHistoryRepository = repository
 
-    def create(self, cattle_id: UUID, weight: float, measured_at) -> None:
+    def create(self, cattle_id: UUID, weight: float, measured_at: datetime) -> WeightHistory:
         return self.repository.create(cattle_id, weight, measured_at)
 
     def get_all(self, cattle_id: UUID):
