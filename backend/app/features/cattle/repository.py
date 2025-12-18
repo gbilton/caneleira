@@ -1,7 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from typing import List, Optional
-from .model import Cattle
+from .model import Cattle, WeightHistory
 from .schema import CattleCreate, CattleUpdate
 from uuid import UUID
 from datetime import datetime, timezone
@@ -48,4 +48,30 @@ class CattleRepository:
     # Soft delete
     def delete(self, cattle: Cattle) -> None:
         cattle.deleted_at = datetime.now(tz=timezone.utc)
+        self.db.commit()
+
+class WeightHistoryRepository:
+    def __init__(self, db: Session):
+        self.db = db
+
+    def create(self, cattle_id: UUID, weight: float, measured_at: datetime) -> WeightHistory:
+        weight_history_record = WeightHistory(
+            cattle_id=cattle_id,
+            weight=weight,
+            measured_at=measured_at
+        )
+        self.db.add(weight_history_record)
+        self.db.commit()
+        return weight_history_record
+
+    def get_all(self, cattle_id: UUID) -> List:
+        stmt = select(WeightHistory).where(WeightHistory.cattle_id == cattle_id, WeightHistory.deleted_at.is_(None))
+        return self.db.execute(stmt).scalars().all()
+    
+    def get_by_id(self, cattle_id: UUID, id: UUID) -> Optional[WeightHistory]:
+        stmt = select(WeightHistory).where(WeightHistory.id == id, WeightHistory.cattle_id == cattle_id, WeightHistory.deleted_at.is_(None))
+        return self.db.execute(stmt).scalars().first()
+    
+    def delete(self, weight_history_record: WeightHistory) -> None:
+        weight_history_record.deleted_at = datetime.now(tz=timezone.utc)
         self.db.commit()

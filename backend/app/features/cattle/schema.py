@@ -35,3 +35,35 @@ class CattleResponse(BaseModel):
     created_at: datetime
     updated_at: datetime
     deleted_at: datetime | None = None
+
+class WeightHistoryCreate(BaseModel):
+    cattle_id: UUID
+    weight: float
+    measured_at: datetime
+
+    model_config = {
+        "from_attributes": True
+    }
+
+class WeightHistoryRead(BaseModel):
+    id: UUID
+    cattle_id: UUID
+    weight: float
+    measured_at: datetime
+    created_at: datetime
+
+    model_config = {
+        "from_attributes": True
+    }   
+
+class WeightHistoryResponse(BaseModel):
+    id: UUID
+    cattle_id: UUID
+    weight: float
+    measured_at: datetime
+    created_at: datetime
+
+    model_config = {
+        "from_attributes": True
+    }  
+

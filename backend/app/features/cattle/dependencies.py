@@ -1,7 +1,7 @@
 from fastapi import Depends
 from app.db.session import get_session
-from .repository import CattleRepository
-from .service import CattleService
+from .repository import CattleRepository, WeightHistoryRepository
+from .service import CattleService, WeightHistoryService
 
 
 def get_cattle_service(
@@ -9,3 +9,9 @@ def get_cattle_service(
 ) -> CattleService:
     repo = CattleRepository(session)
     return CattleService(repo)
+
+def get_weight_history_service(
+    session = Depends(get_session),
+) -> WeightHistoryService:
+    repo = WeightHistoryRepository(session)
+    return WeightHistoryService(repo)
