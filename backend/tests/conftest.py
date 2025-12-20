@@ -9,6 +9,7 @@ def setup_database():
     yield
     drop_test_db()
 
+
 @pytest.fixture
 def db():
     db = TestingSessionLocal()

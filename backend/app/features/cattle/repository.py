@@ -28,12 +28,16 @@ class CattleRepository:
 
     # Get by ID
     def get_by_id(self, cattle_id: UUID) -> Optional[Cattle]:
-        stmt = select(Cattle).where(Cattle.id == cattle_id, Cattle.deleted_at.is_(None))
+        stmt = select(Cattle).where(
+            Cattle.id == cattle_id, Cattle.deleted_at.is_(None)
+        )
         return self.db.execute(stmt).scalars().first()
 
     # Get by identifier
     def get_by_identifier(self, identifier: str) -> Optional[Cattle]:
-        stmt = select(Cattle).where(Cattle.identifier == identifier, Cattle.deleted_at.is_(None))
+        stmt = select(Cattle).where(
+            Cattle.identifier == identifier, Cattle.deleted_at.is_(None)
+        )
         return self.db.execute(stmt).scalars().first()
 
     # Update existing cattle
@@ -50,28 +54,36 @@ class CattleRepository:
         cattle.deleted_at = datetime.now(tz=timezone.utc)
         self.db.commit()
 
+
 class WeightHistoryRepository:
     def __init__(self, db: Session):
         self.db = db
 
-    def create(self, cattle_id: UUID, weight: float, measured_at: datetime) -> WeightHistory:
+    def create(
+        self, cattle_id: UUID, weight: float, measured_at: datetime
+    ) -> WeightHistory:
         weight_history_record = WeightHistory(
-            cattle_id=cattle_id,
-            weight=weight,
-            measured_at=measured_at
+            cattle_id=cattle_id, weight=weight, measured_at=measured_at
         )
         self.db.add(weight_history_record)
         self.db.commit()
         return weight_history_record
 
     def get_all(self, cattle_id: UUID) -> Sequence[WeightHistory]:
-        stmt = select(WeightHistory).where(WeightHistory.cattle_id == cattle_id, WeightHistory.deleted_at.is_(None))
+        stmt = select(WeightHistory).where(
+            WeightHistory.cattle_id == cattle_id,
+            WeightHistory.deleted_at.is_(None),
+        )
         return self.db.execute(stmt).scalars().all()
-    
+
     def get_by_id(self, cattle_id: UUID, id: UUID) -> Optional[WeightHistory]:
-        stmt = select(WeightHistory).where(WeightHistory.id == id, WeightHistory.cattle_id == cattle_id, WeightHistory.deleted_at.is_(None))
+        stmt = select(WeightHistory).where(
+            WeightHistory.id == id,
+            WeightHistory.cattle_id == cattle_id,
+            WeightHistory.deleted_at.is_(None),
+        )
         return self.db.execute(stmt).scalars().first()
-    
+
     def delete(self, weight_history_record: WeightHistory) -> None:
         weight_history_record.deleted_at = datetime.now(tz=timezone.utc)
         self.db.commit()

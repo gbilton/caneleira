@@ -9,11 +9,15 @@ from unittest.mock import Mock
 from app.features.cattle.service import CattleService, WeightHistoryService
 from app.features.cattle.model import Cattle, WeightHistory
 from app.features.cattle.schema import CattleCreate, CattleRead, CattleUpdate
-from app.features.cattle.repository import CattleRepository, WeightHistoryRepository
+from app.features.cattle.repository import (
+    CattleRepository,
+    WeightHistoryRepository,
+)
 
 # ============================================================================
 # Fixtures
 # ============================================================================
+
 
 @pytest.fixture
 def cattle_repository() -> Mock:
@@ -41,6 +45,7 @@ def weight_history_service(
 # Helpers to create real objects
 # ============================================================================
 
+
 def make_cattle(
     id: Optional[UUID] = None,
     identifier: str = "ABC123",
@@ -50,26 +55,27 @@ def make_cattle(
         identifier=identifier,
         created_at=datetime.now(tz=timezone.utc),
         updated_at=datetime.now(tz=timezone.utc),
-        deleted_at=None
+        deleted_at=None,
     )
 
 
 def make_weight_history(
     cattle_id: Optional[UUID] = None,
     id: Optional[UUID] = None,
-    weight: float = 350.0
+    weight: float = 350.0,
 ) -> WeightHistory:
     return WeightHistory(
         id=id or uuid4(),
         cattle_id=cattle_id or uuid4(),
         weight=weight,
-        measured_at=datetime.now(tz=timezone.utc)
+        measured_at=datetime.now(tz=timezone.utc),
     )
 
 
 # ============================================================================
 # CattleService tests
 # ============================================================================
+
 
 def test_create_cattle_success(
     cattle_service: CattleService,
@@ -155,7 +161,9 @@ def test_update_cattle_success(
 
     assert isinstance(result, CattleRead)
     assert result.identifier == "NEWID"
-    cattle_repository.update.assert_called_once_with(cattle, CattleUpdate(identifier="NEWID"))
+    cattle_repository.update.assert_called_once_with(
+        cattle, CattleUpdate(identifier="NEWID")
+    )
 
 
 def test_update_cattle_not_found(
@@ -197,6 +205,7 @@ def test_delete_cattle_not_found(
 # ============================================================================
 # WeightHistoryService tests
 # ============================================================================
+
 
 def test_create_weight_history(
     weight_history_service: WeightHistoryService,

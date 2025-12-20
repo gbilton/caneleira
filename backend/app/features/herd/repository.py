@@ -26,7 +26,9 @@ class HerdRepository:
 
     # Get by ID
     def get_by_id(self, herd_id: UUID) -> Optional[Herd]:
-        stmt = select(Herd).where(Herd.id == herd_id, Herd.deleted_at.is_(None))
+        stmt = select(Herd).where(
+            Herd.id == herd_id, Herd.deleted_at.is_(None)
+        )
         return self.db.execute(stmt).scalars().first()
 
     # Get by name

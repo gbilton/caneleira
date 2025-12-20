@@ -11,6 +11,7 @@ def get_cattle_service(
     repo = CattleRepository(session)
     return CattleService(repo)
 
+
 def get_weight_history_service(
     session: Session = Depends(get_session),
 ) -> WeightHistoryService:

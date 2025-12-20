@@ -5,7 +5,7 @@ from .service import HerdService
 
 
 def get_herd_service(
-    session = Depends(get_session),
+    session=Depends(get_session),
 ) -> HerdService:
     repo = HerdRepository(session)
     return HerdService(repo)
