@@ -9,6 +9,7 @@ frontend/*.local
 frontend/.eslintcache
 frontend/coverage/
 frontend/*.tsbuildinfo
+frontend/.tanstack
 
 # Environment
 frontend/.env
