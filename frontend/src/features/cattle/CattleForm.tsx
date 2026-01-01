@@ -2,6 +2,9 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { createCattleSchema, type CreateCattleInput } from './types'
 import { useAddCattle } from './hooks/useAddCattle'
+import { Button } from '../../components/ui/button'
+import { Input } from '@/components/ui/input'
+import { toast } from 'sonner'
 
 export function CattleForm() {
     const { register, handleSubmit, reset, formState: { errors } } = useForm<CreateCattleInput>({
@@ -13,23 +16,24 @@ export function CattleForm() {
     const onSubmit = (data: CreateCattleInput) => {
         mutate(data, {
             onSuccess: () => {
-                alert('Cattle added successfully!')
+                toast.success('Cattle added successfully!')
                 reset()
             },
-            onError: () => alert('Failed to add cattle'),
+            onError: () => toast.error('Failed to add cattle'),
         })
     }
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2 max-w-sm">
+            <h1 className="text-2xl mb-4">Add New Cattle</h1>
             <label>
                 Identifier
-                <input type="text" {...register('identifier')} className="border p-1" />
+                <Input type="text" {...register('identifier')} />
                 {errors.identifier && <span className="text-red-500">{errors.identifier.message}</span>}
             </label>
-            <button type="submit" disabled={isPending} className="bg-blue-500 text-white p-2">
+            <Button type='submit' disabled={isPending}>
                 {isPending ? 'Adding...' : 'Add Cattle'}
-            </button>
+            </Button>
         </form>
     )
 }

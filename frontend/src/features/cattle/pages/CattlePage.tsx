@@ -1,9 +1,10 @@
 import { CattleForm } from '../CattleForm'
+import CattleList from '../components/CattleList'
 
 export function CattlePage() {
     return (
         <div className="p-4">
-            <h1 className="text-2xl mb-4">Add New Cattle</h1>
+            <CattleList />
             <CattleForm />
         </div>
     )

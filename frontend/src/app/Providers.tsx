@@ -1,8 +1,6 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { type QueryClient, QueryClientProvider } from "@tanstack/react-query"
 
-const queryClient = new QueryClient()
-
-export function Providers({ children }: { children: React.ReactNode }) {
+export function Providers({ queryClient, children }: { queryClient: QueryClient, children: React.ReactNode }) {
     return (
         <QueryClientProvider client={queryClient}>
             {children}
